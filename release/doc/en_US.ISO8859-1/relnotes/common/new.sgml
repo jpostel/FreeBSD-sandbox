@@ -1,0 +1,225 @@
+<articleinfo>
+  <title>&os;/&arch; &release.current; Release Notes</title>
+
+  <corpauthor>The &os; Project</corpauthor>
+
+  <pubdate>$FreeBSD$</pubdate>
+
+  <copyright>
+    <year>2000</year>
+    <year>2001</year>
+    <year>2002</year>
+    <year>2003</year>
+    <year>2004</year>
+    <holder role="mailto:doc@FreeBSD.org">The &os; Documentation Project</holder>
+  </copyright>
+
+  <abstract>
+    <para>The release notes for &os; &release.current; contain a summary
+      of the changes made to the &os; base system since &release.branch; is created.
+      This document lists applicable security advisories that were issued since
+      the last release, as well as significant changes to the &os;
+      kernel and userland.
+      Some brief remarks on upgrading are also presented.</para>
+  </abstract>
+</articleinfo>
+
+<sect1 id="intro">
+  <title>Introduction</title>
+
+  <para>This document contains the release notes for &os;
+    &release.current; on the &arch.print; hardware platform.  It
+    describes recently added, changed, or deleted features of &os;.
+    It also provides some notes on upgrading
+    from previous versions of &os;.</para>
+
+<![ %release.type.current [
+
+  <para>The &release.type; distribution to which these release notes
+    apply represents the latest point along the &release.branch; development
+    branch since &release.branch; is created.  Some pre-built, binary
+    &release.type; distributions along this branch
+    can be found at <ulink url="&release.url;"></ulink>.</para>
+
+]]>
+
+<![ %release.type.snapshot [
+
+  <para>The &release.type; distribution to which these release notes
+    apply represents a point along the &release.branch; development
+    branch between &release.prev; and the future &release.next;.  Some
+    pre-built, binary &release.type; distributions along this branch
+    can be found at <ulink url="&release.url;"></ulink>.</para>
+
+]]>
+
+<![ %release.type.release [
+
+  <para>This distribution of &os; &release.current; is a
+    &release.type; distribution.  It can be found at <ulink
+    url="&release.url;"></ulink> or any of its mirrors.  More
+    information on obtaining this (or other) &release.type;
+    distributions of &os; can be found in the <ulink
+    url="&url.books.handbook;/mirrors.html"><quote>Obtaining
+    &os;</quote> appendix</ulink> to the <ulink
+    url="&url.books.handbook;/">&os;
+    Handbook</ulink>.</para>
+
+]]>
+
+  <para>All users are encouraged to consult the release errata before
+    installing &os;.  The errata document is updated with
+    <quote>late-breaking</quote> information discovered late in the
+    release cycle or after the release.  Typically, it contains
+    information on known bugs, security advisories, and corrections to
+    documentation.  An up-to-date copy of the errata for &os;
+    &release.current; can be found on the &os; Web site.</para>
+
+</sect1>
+
+<sect1 id="new">
+  <title>What's New</title>
+
+  <para>This section describes
+    the most user-visible new or changed features in &os;
+    since &release.prev;.
+    In general, changes described here are unique to the &release.branch;
+    branch unless specifically marked as &merged; features.
+  </para>
+
+  <para>Typical release note items
+    document recent security advisories issued after
+    &release.prev.historic;,
+    new drivers or hardware support, new commands or options,
+    major bug fixes, or contributed software upgrades.  They may also
+    list changes to major ports/packages or release engineering
+    practices.  Clearly the release notes cannot list every single
+    change made to &os; between releases; this document focuses
+    primarily on security advisories, user-visible changes, and major
+    architectural improvements.</para>
+
+  <sect2 id="security">
+    <title>Security Advisories</title>
+
+    <para></para>
+  </sect2>
+
+  <sect2 id="kernel">
+    <title>Kernel Changes</title>
+
+    <para>The loader tunable <varname>debug.mpsafevm</varname> has been
+      has been enabled by default.</para>
+
+    <!-- Above this line, sort kernel changes by manpage/keyword-->
+
+    <sect3 id="boot">
+      <title>Boot Loader Changes</title>
+
+      <para arch="i386">A serial console-capable version of
+	<filename>boot0</filename> has been added.  It can be written
+	to a disk using &man.boot0cfg.8; and specifying
+	<filename>/boot/boot0sio</filename> as the argument to the
+	<option>-b</option> option.</para>
+
+      <para arch="i386"><filename>cdboot</filename> now works around a
+	BIOS problem observed on some systems when booting from USB
+	CDROM drives.</para>
+
+      <!-- Above this line, order boot loader changes by keyword-->
+
+    </sect3>
+
+    <sect3 id="proc">
+      <title>Hardware Support</title>
+
+      <sect4 id="mm">
+	<title>Multimedia Support</title>
+
+	<para></para>
+      </sect4>
+
+      <sect4 id="net-if">
+	<title>Network Interface Support</title>
+
+	<para></para>
+      </sect4>
+    </sect3>
+
+    <sect3 id="net-proto">
+      <title>Network Protocols</title>
+
+      <para></para>
+    </sect3>
+
+    <sect3 id="disks">
+      <title>Disks and Storage</title>
+
+      <para></para>
+    </sect3>
+
+    <sect3 id="fs">
+      <title>File Systems</title>
+
+      <para>The autofs(9) file system and the userland library
+	&man.libautofs.3; have been added.</para>
+    </sect3>
+
+    <sect3>
+      <title>Contributed Software</title>
+
+      <para></para>
+    </sect3>
+  </sect2>
+
+  <sect2 id="userland">
+    <title>Userland Changes</title>
+
+    <para arch="i386">The &man.mkuzip.8;, which is a non-GPL
+      utility to compress file system images for use with
+      <literal>GEOM_UZIP</literal> &man.geom.4; module,
+      has been added.</para>
+
+    <sect3 id="rc-scripts">
+      <title><filename>/etc/rc.d</filename> Scripts</title>
+
+      <para></para>
+    </sect3>
+  </sect2>
+
+  <sect2 id="contrib">
+    <title>Contributed Software</title>
+
+    <para></para>
+  </sect2>
+
+  <sect2 id="ports">
+    <title>Ports/Packages Collection Infrastructure</title>
+
+    <para></para>
+  </sect2>
+
+  <sect2 id="releng">
+    <title>Release Engineering and Integration</title>
+
+    <para></para>
+  </sect2>
+
+  <sect2 id="doc">
+    <title>Documentation</title>
+
+    <para></para>
+
+  </sect2>
+</sect1>
+
+<sect1 id="upgrade">
+  <title>Upgrading from previous releases of &os;</title>
+
+  <para></para>
+
+  <important>
+    <para>Upgrading &os; should, of course, only be attempted after
+      backing up <emphasis>all</emphasis> data and configuration
+      files.</para>
+  </important>
+</sect1>

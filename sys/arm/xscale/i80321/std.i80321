@@ -1,0 +1,4 @@
+#XScale i80321 generic configuration
+#$FreeBSD$
+files		"../xscale/i80321/files.i80321"
+cpu 		CPU_XSCALE_80321
