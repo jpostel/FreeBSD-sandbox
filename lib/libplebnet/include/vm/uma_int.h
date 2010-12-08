@@ -24,12 +24,88 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef	_PLEBNET_SYS_CONDVAR_H_
-#define _PLEBNET_SYS_CONDVAR_H_
+#ifndef	_PLEBNET_VM_UMA_INT_H_
+#define _PLEBNET_VM_UMA_INT_H_
+#define vtoslab		vtoslab_native
+#define vsetslab	vsetslab_native
+#define vsetobj		vsetobj_native
 #include_next <vm/uma_int.h>
-
 #undef	vtoslab
 #undef	vsetslab
 #undef	vsetobj
 
-#endif	/* _PLEBNET_SYS_CONDVAR_H_ */
+#define vsetobj(a, b)
+
+#undef UMA_MD_SMALL_ALLOC
+#define NO_OBJ_ALLOC
+
+#include <pn_private.h>
+
+static pthread_mutex_t bucket_lock;
+
+static __inline void
+thread_bucket_lock(void)
+{
+
+        pn_mutex_lock(&bucket_lock);
+}
+
+static __inline void
+thread_bucket_unlock(void)
+{
+
+        pn_mutex_unlock(&bucket_lock);
+}
+
+#define critical_enter()        thread_bucket_lock()
+#define critical_exit()         thread_bucket_unlock()
+
+static int uma_page_mask;
+
+
+#define UMA_PAGE_HASH(va) (((va) >> PAGE_SHIFT) & uma_page_mask)
+
+typedef struct uma_page {
+        LIST_ENTRY(uma_page)    list_entry;
+        vm_offset_t             up_va;
+        uma_slab_t              up_slab;
+} *uma_page_t;
+
+LIST_HEAD(uma_page_head, uma_page);
+struct uma_page_head *uma_page_slab_hash;
+
+static __inline uma_slab_t
+vtoslab(vm_offset_t va)
+{       
+        struct uma_page_head *hash_list;
+        uma_page_t up;
+
+        hash_list = &uma_page_slab_hash[UMA_PAGE_HASH(va)];
+        LIST_FOREACH(up, hash_list, list_entry)
+                if (up->up_va == va)
+                        return (up->up_slab);
+        return (NULL);
+}
+
+static __inline void
+vsetslab(vm_offset_t va, uma_slab_t slab)
+{
+        struct uma_page_head *hash_list;
+        uma_page_t up;
+        hash_list = &uma_page_slab_hash[UMA_PAGE_HASH(va)];
+        LIST_FOREACH(up, hash_list, list_entry)
+                if (up->up_va == va)
+                        break;
+
+        if (up != NULL) {
+                up->up_slab = slab;
+                return;
+        }
+
+        up = _malloc(sizeof(*up));
+        up->up_va = va;
+        up->up_slab = slab;
+        LIST_INSERT_HEAD(hash_list, up, list_entry);
+}
+
+#endif	/* _PLEBNET_VM_UMA_INT_H_ */

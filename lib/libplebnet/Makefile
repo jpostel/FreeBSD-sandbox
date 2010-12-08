@@ -4,6 +4,7 @@ LIB=	plebnet
 
 PN_KERN_COMMON_OBJS +=		\
 	kern_environment.o	\
+	kern_fail.o		\
 	kern_mbuf.o		\
 	kern_mtxpool.o		\
 	kern_sysctl.o		\
@@ -68,17 +69,27 @@ PN_NETINET_COMMON_OBJS +=	\
 	tcp_timer.o		\
 	tcp_timewait.o		\
 	tcp_usrreq.o		\
-	udp_usrreq.o
+	udp_usrreq.o		\
+	cc.o			\
+	cc_newreno.o
 
 PN_LIBKERN_COMMON_OBJS =	\
 	arc4random.o		\
 	strlcpy.o
 
 PN_OTHER_COMMON_OBJS =		\
-	harvest.o
+	harvest.o		\
+	uma_core.o
 
 PN_SYS_COMMON_OBJS = 		\
-	pn_in_cksum.o
+	pn_compat.o		\
+	pn_glue.o		\
+	pn_in_cksum.o		\
+	pn_kern_subr.o		\
+	pn_kern_timeout.o	\
+	pn_lock.o		\
+	pn_private.o
+
 
 PN_MFILES = 			\
 	bus_if.h 		\
@@ -114,7 +125,7 @@ PN_OPT_FILES = 			\
 	opt_zero.h
 
 # Search for kernel source tree in standard places.
-.for _dir in ${.CURDIR}/../.. ${.CURDIR}/../../.. /sys /usr/src/sys
+.for _dir in ${.CURDIR}/../.. ${.CURDIR}/../../sys ${.CURDIR}/../../.. /sys /usr/src/sys
 .if !defined(SYSDIR) && exists(${_dir}/kern/)
 SYSDIR=	${_dir}
 .endif
@@ -128,6 +139,8 @@ PREFIX= ${SYSDIR}
 .PATH: ${PREFIX}/kern
 .PATH: ${PREFIX}/net
 .PATH: ${PREFIX}/netinet
+.PATH: ${PREFIX}/netinet/cc
+.PATH: ${PREFIX}/vm
 .PATH: ${PREFIX}/libkern
 .PATH: ${PREFIX}/dev/random
 .PATH: plebnet_sys
@@ -152,6 +165,7 @@ CFLAGS+=	-I${PREFIX}
 CFLAGS+=	-I.
 CFLAGS+=	-I${PREFIX}/contrib/altq
 CFLAGS+=	-I${PREFIX}/contrib/pf
+CFLAGS+=	-I/usr/include
 CFLAGS+=	-D_KERNEL
 CFLAGS+=	-DMUTEX_NOINLINE
 CFLAGS+=	-DRWLOCK_NOINLINE
@@ -179,9 +193,9 @@ _ILINKS+=${MACHINE_CPUARCH}
 .endif
 
 # newer versions of the kernel ...
-#.if ${MACHINE_CPUARCH} == "i386" || ${MACHINE_CPUARCH} == "amd64"
-#_ILINKS+=x86
-#.endif
+.if ${MACHINE_CPUARCH} == "i386" || ${MACHINE_CPUARCH} == "amd64"
+_ILINKS+=x86
+.endif
 
 
 all: ${_ILINKS}
