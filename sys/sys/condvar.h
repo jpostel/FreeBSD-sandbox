@@ -43,10 +43,14 @@ TAILQ_HEAD(cv_waitq, thread);
  * and is held across calls to cv_signal() and cv_broadcast().  It is an
  * optimization to avoid looking up the sleep queue if there are no waiters.
  */
+#ifndef NO_CV_NATIVE
 struct cv {
 	const char	*cv_description;
 	int		cv_waiters;
 };
+#else
+struct cv;
+#endif
 
 #ifdef _KERNEL
 void	cv_init(struct cv *cvp, const char *desc);
