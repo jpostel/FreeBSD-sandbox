@@ -31,6 +31,6 @@
 
 int             pn_mutex_lock(pthread_mutex_t *);
 int             pn_mutex_unlock(pthread_mutex_t *);
-extern void *_malloc(int);
+extern void	*pn_malloc(int);
 
 #endif /* _PLEBNET_PN_PRIVATE_H_ */

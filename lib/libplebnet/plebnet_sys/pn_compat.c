@@ -34,6 +34,9 @@
 #include <sys/time.h>
 #include <sys/proc.h>
 
+#include <signal.h>
+#include <unistd.h>
+
 
 #include <pthread.h>
 struct malloc_type;
@@ -166,4 +169,11 @@ kproc_kthread_add(void (*start_routine)(void *), void *arg,
 	error = pthread_create(&thread, &attr, pthread_start_routine, psa);
 
 	return (error);
+}
+
+void
+tdsignal(struct thread *td, int sig)
+{
+
+	kill(getpid(), sig);
 }

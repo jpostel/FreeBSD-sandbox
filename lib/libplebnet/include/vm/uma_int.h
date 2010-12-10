@@ -102,7 +102,7 @@ vsetslab(vm_offset_t va, uma_slab_t slab)
                 return;
         }
 
-        up = _malloc(sizeof(*up));
+        up = pn_malloc(sizeof(*up));
         up->up_va = va;
         up->up_slab = slab;
         LIST_INSERT_HEAD(hash_list, up, list_entry);

@@ -24,15 +24,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef	_PLEBNET_SYS_CONDVAR_H_
-#define _PLEBNET_SYS_CONDVAR_H_
+#ifndef	_PLEBNET_PLEBNET_H_
+#define _PLEBNET_PLEBNET_H_
 
-#define NO_CV_NATIVE
-#include_next <sys/condvar.h>
+int	pn_init(void);
 
-struct	cv {
-	const char *cv_description;
-	pthread_cond_t cv_cond;
-};
-
-#endif	/* _PLEBNET_SYS_CONDVAR_H_ */
+#endif /* _PLEBNET_PLEBNET_H_ */

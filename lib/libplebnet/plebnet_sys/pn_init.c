@@ -24,15 +24,33 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef	_PLEBNET_SYS_CONDVAR_H_
-#define _PLEBNET_SYS_CONDVAR_H_
+#include <sys/cdefs.h>
+#include <sys/param.h>
+#include <stdlib.h>
+#include <sys/pcpu.h>
 
-#define NO_CV_NATIVE
-#include_next <sys/condvar.h>
+extern void mi_startup(void);
+extern void uma_startup(void *, int);
+extern void uma_startup2(void);
+caddr_t kern_timeout_callwheel_alloc(caddr_t v);
+void kern_timeout_callwheel_init(void);
+extern int ncallout;
 
-struct	cv {
-	const char *cv_description;
-	pthread_cond_t cv_cond;
-};
+int
+pn_init(void)
+{
+        struct pcpu *pc;
 
-#endif	/* _PLEBNET_SYS_CONDVAR_H_ */
+        /* vm_init bits */
+        ncallout = 64;
+        pc = malloc(sizeof(struct pcpu));
+        pcpu_init(pc, 0, sizeof(struct pcpu));
+        kern_timeout_callwheel_alloc(malloc(512*1024));
+        kern_timeout_callwheel_init();
+        uma_startup(malloc(40*4096), 40);
+	uma_startup2();
+
+        mi_startup();
+
+	return (0);
+}

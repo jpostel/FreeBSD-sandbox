@@ -165,6 +165,29 @@ prison_remote_ip4(struct ucred *cred, struct in_addr *ia)
 	return (0);
 }
 
+int 
+prison_saddrsel_ip4(struct ucred *cred, struct in_addr *ia)
+{
+
+	/* not jailed */
+	return (1);
+}
+
+int 
+prison_saddrsel_ip6(struct ucred *cred, struct in6_addr *ia)
+{
+
+	/* not jailed */
+	return (1);
+
+}
+
+int
+jailed(struct ucred *cred)
+{
+
+	return (0);
+}
 
 /*
  * Return 1 if the passed credential is in a jail and that jail does not

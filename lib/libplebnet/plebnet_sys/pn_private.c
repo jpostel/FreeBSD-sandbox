@@ -46,7 +46,7 @@ pn_mutex_unlock(pthread_mutex_t *lock)
 }
 
 void *
-_malloc(int size)
+pn_malloc(int size)
 {
 	
 	return (malloc(size));

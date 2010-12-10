@@ -375,3 +375,11 @@ sx_sysinit(void *arg)
 
 	sx_init(args->sa_sx, args->sa_desc);
 }
+
+/*
+ * XXX should never be used;
+ */
+struct lock_class lock_class_lockmgr;
+struct lock_class lock_class_mtx_spin;
+
+

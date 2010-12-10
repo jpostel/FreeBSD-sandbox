@@ -24,15 +24,58 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef	_PLEBNET_SYS_CONDVAR_H_
-#define _PLEBNET_SYS_CONDVAR_H_
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD$");
 
-#define NO_CV_NATIVE
-#include_next <sys/condvar.h>
+#include <sys/param.h>
+#include <sys/systm.h>
+#include <sys/bus.h>
+#include <sys/interrupt.h>
+#include <sys/kernel.h>
+#include <sys/kthread.h>
+#include <sys/lock.h>
+#include <sys/malloc.h>
+#include <sys/mutex.h>
+#include <sys/proc.h>
+#include <sys/sched.h>
+#include <sys/taskqueue.h>
+#include <sys/unistd.h>
+#include <machine/stdarg.h>
 
-struct	cv {
-	const char *cv_description;
-	pthread_cond_t cv_cond;
+static MALLOC_DEFINE(M_TASKQUEUE, "taskqueue", "Task Queues");
+
+struct taskqueue {
+	STAILQ_HEAD(, task)	tq_queue;
+	const char		*tq_name;
+	taskqueue_enqueue_fn	tq_enqueue;
+	void			*tq_context;
+	struct task		*tq_running;
+	struct mtx		tq_mutex;
+	struct thread		**tq_threads;
+	int			tq_tcount;
+	int			tq_spin;
+	int			tq_flags;
 };
 
-#endif	/* _PLEBNET_SYS_CONDVAR_H_ */
+#define	TQ_FLAGS_ACTIVE		(1 << 0)
+#define	TQ_FLAGS_BLOCKED	(1 << 1)
+#define	TQ_FLAGS_PENDING	(1 << 2)
+
+
+struct taskqueue *taskqueue_swi;
+
+int
+taskqueue_enqueue(struct taskqueue *queue, struct task *task)
+{
+
+	panic("should be unreachable");
+	return (0);
+}
+
+void
+taskqueue_drain(struct taskqueue *queue, struct task *task)
+{
+	
+	panic("should be unreachable");
+}
+

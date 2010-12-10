@@ -75,6 +75,7 @@ PN_NETINET_COMMON_OBJS +=	\
 
 PN_LIBKERN_COMMON_OBJS =	\
 	arc4random.o		\
+	bcd.o			\
 	strlcpy.o
 
 PN_OTHER_COMMON_OBJS =		\
@@ -85,10 +86,19 @@ PN_SYS_COMMON_OBJS = 		\
 	pn_compat.o		\
 	pn_glue.o		\
 	pn_in_cksum.o		\
+	pn_init.o		\
+	pn_init_main.o		\
+	pn_kern_condvar.o	\
+	pn_kern_descrip.o	\
+	pn_kern_intr.o		\
 	pn_kern_subr.o		\
+	pn_kern_synch.o		\
 	pn_kern_timeout.o	\
 	pn_lock.o		\
-	pn_private.o
+	pn_private.o		\
+	pn_subr_prf.o		\
+	pn_subr_taskqueue.o	\
+	pn_sys_generic.o
 
 
 PN_MFILES = 			\
